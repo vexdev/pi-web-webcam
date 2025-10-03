@@ -1,0 +1,20 @@
+---
+version: '3.8'
+
+services:
+  cross-compile:
+    build: .
+    container_name: cross-compile
+
+    # Allow attaching to the container.
+    stdin_open: true
+    tty: true
+    environment:
+      - OUTPUT_DIR=/output
+
+    volumes:
+      - ../:/build
+      - output:/output
+volumes:
+  output:
+    driver: local

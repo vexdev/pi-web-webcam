@@ -3,6 +3,9 @@
 # Allow to overwrite default buildroot location
 BUILDROOT_DIR=${BUILDROOT_DIR:-buildroot}
 
+# Allow to overwrite default output directory
+OUTPUT_DIR=${OUTPUT_DIR:-output}
+
 if [ ! -d "$BUILDROOT_DIR" ]; then
   echo "Please provide a valid buildroot directory, either by using BUILDROOT_DIR or by renaming it to \"buildroot\""
   exit 1
@@ -28,16 +31,6 @@ esac
 CONFIG_="BR2" KCONFIG_CONFIG="configs/${BOARDNAME}_defconfig" "$BUILDROOT_DIR/support/kconfig/merge_config.sh" -m -r configs/config "configs/$BOARDNAME"
 sed "1i ### DO NOT EDIT, this file was automatically generated\n" -i "configs/${BOARDNAME}_defconfig"
 
-# Merge kernel configurations
-if [ -f "board/linux-${BOARDNAME}.config" ]; then
-  KCONFIG_CONFIG="board/linux.config" "$BUILDROOT_DIR/support/kconfig/merge_config.sh" -m -r board/linux-base.config "board/linux-${BOARDNAME}.config"
-else
-  cp board/linux-base.config board/linux.config
-fi
-sed "1i ### DO NOT EDIT, this file was automatically generated\n" -i board/linux.config
-
 # Create full buildroot configuration
-BR2_EXTERNAL="$(pwd)" make O="$(pwd)/output/$BOARDNAME" -C "$BUILDROOT_DIR" "${BOARDNAME}_defconfig"
-
-# Build
-make -C "output/$BOARDNAME" all
+BR2_EXTERNAL="$(pwd)" make O="$OUTPUT_DIR/$BOARDNAME" -C "$BUILDROOT_DIR" "${BOARDNAME}_defconfig"
+make -C "$OUTPUT_DIR/$BOARDNAME" all

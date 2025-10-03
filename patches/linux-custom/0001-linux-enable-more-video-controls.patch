@@ -36,7 +36,7 @@ index fb0a892..5c850be 100644
  
  	pd = &opts->uvc_processing;
  	pd->bLength			= UVC_DT_PROCESSING_UNIT_SIZE(2);
-@@ -814,8 +828,8 @@
+@@ -814,9 +828,9 @@
  	pd->bSourceID			= 1;
  	pd->wMaxMultiplier		= cpu_to_le16(16*1024);
  	pd->bControlSize		= 2;
@@ -45,5 +45,6 @@ index fb0a892..5c850be 100644
 +	pd->bmControls[0]		= uvc_gadget_processing_unit_controls[0];
 +	pd->bmControls[1]		= uvc_gadget_processing_unit_controls[1];
  	pd->iProcessing			= 0;
+	pd->bmVideoStandards		= 0;
  
  	od = &opts->uvc_output_terminal;
