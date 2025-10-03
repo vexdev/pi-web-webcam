@@ -1,0 +1,11 @@
+[Unit]
+Description=Load v4l2loopback
+After=systemd-udev-settle.service
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/modprobe v4l2loopback video_nr=33 card_label=LoopbackCam exclusive_caps=1
+RemainAfterExit=yes
+
+[Install]
+WantedBy=basic.target
