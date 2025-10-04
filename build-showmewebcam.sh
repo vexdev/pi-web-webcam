@@ -12,6 +12,8 @@ if [ ! -d "$BUILDROOT_DIR" ]; then
 fi
 
 export BOARDNAME=$1
+export WIFI_SSID=$2
+export WIFI_PSK=$3
 
 case "$BOARDNAME" in
   raspberrypi0)

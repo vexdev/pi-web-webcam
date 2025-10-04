@@ -2,6 +2,9 @@
 
 set -e
 
+exec 1> /dev/kmsg
+exec 2> /dev/kmsg
+
 # Eventually we want to disable the serial interface by default
 # As it can be used as a persistence exploitation vector
 CONFIGURE_USB_SERIAL=false
@@ -140,3 +143,7 @@ ls /sys/class/udc > UDC
 
 # Ensure any configfs changes are picked up
 udevadm settle -t 5 || :
+
+# /usr/bin/uvc-gadget -d /dev/video33 uvc.0
+
+echo "Multi-gadget configuration complete"

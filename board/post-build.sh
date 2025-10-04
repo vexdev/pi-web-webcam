@@ -3,6 +3,9 @@
 set -u
 set -e
 
+: "${WIFI_SSID:?Set WIFI_SSID}"
+: "${WIFI_PSK:?Set WIFI_PSK}"
+
 mkdir -p "${TARGET_DIR}"/etc/systemd/system/getty.target.wants
 # Add a console on tty1
 #ln -sf /usr/lib/systemd/system/getty@.service "${TARGET_DIR}"/etc/systemd/system/getty.target.wants/getty@tty1.service
@@ -10,9 +13,6 @@ mkdir -p "${TARGET_DIR}"/etc/systemd/system/getty.target.wants
 # Add a console on ttyAMA0 and enable auto login
 ln -sf /usr/lib/systemd/system/serial-getty@.service "${TARGET_DIR}"/etc/systemd/system/getty.target.wants/serial-getty@ttyGS0.service
 sed '/^ExecStart=/ s/-o .-p -- ..u./--skip-login --noclear --noissue --login-options "-f root"/' -i "${TARGET_DIR}"/usr/lib/systemd/system/serial-getty@.service
-
-# Add wireless wpa for wlan0
-#ln -sf /usr/lib/systemd/system/wpa_supplicant@.service "${TARGET_DIR}"/etc/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
 
 if ! grep -qE '/var' "${TARGET_DIR}/etc/fstab"; then
 	echo 'tmpfs           /var            tmpfs   rw,mode=1777,size=64m' >> "${TARGET_DIR}/etc/fstab"
@@ -30,7 +30,11 @@ ln -sf /dev/null "${TARGET_DIR}"/etc/systemd/system/sys-kernel-debug.mount
 ln -sf /dev/null "${TARGET_DIR}"/etc/systemd/system/dev-mqueue.mount
 ln -sf /dev/null "${TARGET_DIR}"/etc/systemd/system/systemd-update-utmp.service
 ln -sf /dev/null "${TARGET_DIR}"/etc/systemd/system/systemd-update-utmp-runlevel.service
-ln -sf /dev/null "${TARGET_DIR}"/etc/systemd/system/network.service
+
+# Replace credentials for wlan0
+sed -e "s/@SSID@/${WIFI_SSID}/" -e "s/@PSK@/${WIFI_PSK}/" \
+  "$TARGET_DIR/etc/wpa_supplicant/wpa_supplicant-wlan0.conf.in" > "${TARGET_DIR}/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
+chmod 600 "${TARGET_DIR}/etc/wpa_supplicant/wpa_supplicant-wlan0.conf"
 
 # Set os-release file
 SHOWMEWEBCAM_VERSION=$(support/scripts/setlocalversion "${BR2_EXTERNAL_PICAM_PATH}")

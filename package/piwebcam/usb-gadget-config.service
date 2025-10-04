@@ -4,11 +4,11 @@ After=v4l2loopback-load.service
 
 [Service]
 Type=oneshot
-ExecStart=/opt/uvc-webcam/multi-gadget.sh
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=kmsg
+StandardError=kmsg
 SyslogIdentifier=usb-gadget-config
 WorkingDirectory=/tmp
+ExecStart=/opt/uvc-webcam/multi-gadget.sh
 
 [Install]
 WantedBy=basic.target

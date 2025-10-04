@@ -1,0 +1,9 @@
+update_config=1
+ap_scan=1
+fast_reauth=1
+country=CH
+
+network={
+    ssid="@SSID@"
+    psk="@PSK@"
+}
