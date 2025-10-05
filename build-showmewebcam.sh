@@ -34,5 +34,6 @@ CONFIG_="BR2" KCONFIG_CONFIG="configs/${BOARDNAME}_defconfig" "$BUILDROOT_DIR/su
 sed "1i ### DO NOT EDIT, this file was automatically generated\n" -i "configs/${BOARDNAME}_defconfig"
 
 # Create full buildroot configuration
+set -x # enable debugging
 BR2_EXTERNAL="$(pwd)" make O="$OUTPUT_DIR/$BOARDNAME" -C "$BUILDROOT_DIR" "${BOARDNAME}_defconfig"
 make -C "$OUTPUT_DIR/$BOARDNAME" all

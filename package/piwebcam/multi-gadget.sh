@@ -44,14 +44,16 @@ mkdir -p configs/c.1/strings/0x409
 
 SERIAL=$(cat /sys/firmware/devicetree/base/serial-number)
 echo "$SERIAL"                > strings/0x409/serialnumber
-echo "Show-me Webcam Project" > strings/0x409/manufacturer
-echo "Piwebcam"               > strings/0x409/product
-echo "Piwebcam"               > configs/c.1/strings/0x409/configuration
+echo "Pi Web Webcam Project" > strings/0x409/manufacturer
+echo "Piwwcam"               > strings/0x409/product
+echo "Piwwcam"               > configs/c.1/strings/0x409/configuration
 echo 500                      > configs/c.1/MaxPower
 
 config_usb_serial () {
+  echo "Configuring USB serial interface"
   mkdir -p functions/acm.0
   ln -s functions/acm.0 configs/c.1/acm.0
+  echo "Serial interface configured"
 }
 
 config_frame () {
@@ -144,6 +146,6 @@ ls /sys/class/udc > UDC
 # Ensure any configfs changes are picked up
 udevadm settle -t 5 || :
 
-# /usr/bin/uvc-gadget -d /dev/video33 uvc.0
+/usr/bin/uvc-gadget -d /dev/video33 uvc.0
 
 echo "Multi-gadget configuration complete"

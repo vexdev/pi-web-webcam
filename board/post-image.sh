@@ -6,17 +6,17 @@ GENIMAGE_CFG="$(dirname "$0")/genimage-${BOARDNAME}.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 
 # Inform the kernel about the filesystem and ro state
-if ! grep -qE 'rootfstype=squashfs ro' "${BINARIES_DIR}/rpi-firmware/cmdline.txt"; then
-	sed '/^root=/ s/$/ rootfstype=squashfs ro/' -i "${BINARIES_DIR}/rpi-firmware/cmdline.txt"
-fi
+# if ! grep -qE 'rootfstype=squashfs ro' "${BINARIES_DIR}/rpi-firmware/cmdline.txt"; then
+# 	sed '/^root=/ s/$/ rootfstype=squashfs ro/' -i "${BINARIES_DIR}/rpi-firmware/cmdline.txt"
+# fi
 
 if ! grep -qE 'modules-load=dwc2,libcomposite' "${BINARIES_DIR}/rpi-firmware/cmdline.txt"; then
 	sed '/^root=/ s/$/ modules-load=dwc2,libcomposite/' -i "${BINARIES_DIR}/rpi-firmware/cmdline.txt"
 fi
 
-if ! grep -qE 'loglevel=7' "${BINARIES_DIR}/rpi-firmware/cmdline.txt"; then
-	sed '/^root=/ s/$/ loglevel=7/' -i "${BINARIES_DIR}/rpi-firmware/cmdline.txt"
-fi
+# if ! grep -qE 'loglevel=7' "${BINARIES_DIR}/rpi-firmware/cmdline.txt"; then
+# 	sed '/^root=/ s/$/ loglevel=7/' -i "${BINARIES_DIR}/rpi-firmware/cmdline.txt"
+# fi
 
 # Suppress kernel output during boot
 # if ! grep -qE 'quiet' "${BINARIES_DIR}/rpi-firmware/cmdline.txt"; then
