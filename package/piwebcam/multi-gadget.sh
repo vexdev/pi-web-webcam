@@ -8,7 +8,6 @@ exec 2> /dev/kmsg
 # Eventually we want to disable the serial interface by default
 # As it can be used as a persistence exploitation vector
 CONFIGURE_USB_SERIAL=false
-CONFIGURE_USB_WEBCAM=true
 
 # Now apply settings from the boot config
 if [ -f "/boot/enable-serial-debug" ] ; then
@@ -123,18 +122,7 @@ config_usb_webcam () {
 
 udevadm settle -t 5 || :
 
-# Check if camera is installed correctly
-if [ ! -e /dev/video0 ] ; then
-  echo "I did not detect a camera connected to the Pi. Please check your hardware."
-  CONFIGURE_USB_WEBCAM=false
-  # Nobody can read the error if we don't have serial enabled!
-  CONFIGURE_USB_SERIAL=true
-fi
-
-if [ "$CONFIGURE_USB_WEBCAM" = true ] ; then
-  echo "Configuring USB gadget webcam interface"
-  config_usb_webcam
-fi
+config_usb_webcam
 
 if [ "$CONFIGURE_USB_SERIAL" = true ] ; then
   echo "Configuring USB gadget serial interface"
@@ -146,6 +134,6 @@ ls /sys/class/udc > UDC
 # Ensure any configfs changes are picked up
 udevadm settle -t 5 || :
 
-/usr/bin/uvc-gadget -d /dev/video33 uvc.0
+# /usr/bin/uvc-gadget -d /dev/video33 uvc.0
 
 echo "Multi-gadget configuration complete"
